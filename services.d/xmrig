@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+
+debug()
+{
+
+echo "----------------------------------------------"
+echo "PROCESSOR INFO (/proc/cpuinfo)"
+echo "$(cat /proc/cpuinfo)"
+echo "----------------------------------------------"
+
+echo "----------------------------------------------"
+echo "MEMORY (/proc/meminfo)"
+echo "$(cat /proc/meminfo)"
+echo "----------------------------------------------"
+echo "----------------------------------------------"
+echo "DISKSPACE (df -h)"
+echo "$(df -h)"
+echo "----------------------------------------------"
+echo "----------------------------------------------"
+echo "config file is:" 
+echo "$(cat /root/config.json)"
+echo "----------------------------------------------"
+}
+
+##
+## Environment vars
+## 
+#$URL
+#$USER
+#$PASS
+#$ONEGBHP
+#$TUNED
+#$DEBUG
+#$SETLIMIT
+
+##
+## Allocate 3GB of RAM
+## 
+echo "allocating 3G of RAM"
+python3 -c "x=bytearray(1024*1024*1024*3)"
+echo "Afterallocating 3G of RAM"
+
+BINARY=/root/xmrig
+ARGS=""
+
+if [[ ! -z "$URL" ]] 
+then
+ARGS=$ARGS" -o $URL" 
+fi
+#	sed -i sed $CONFIG -e 's/"url": "donate.v2.xmrig.com:3333",/"url": "$URL",/g'
+#else
+#echo url is not set
+#fi
+
+if [[ ! -z "$USER" ]] 
+then
+ARGS=$ARGS" -u $USER" 
+fi
+#	sed -i $CONFIG -e 's/"user": "YOUR_WALLET_ADDRESS",/"user": "$USER",/g'
+#else
+#echo USER is not set
+#fi
+
+if [[ ! -z "$PASS" ]] 
+then
+ARGS=$ARGS" -p $PASS " 
+fi
+#	sed -i $CONFIG -e 's/"pass": "x",/"pass": "$PASS",/g'
+#	"pass": "x",
+#else
+#echo PASS is not set
+#fi
+
+#if [[ ! -z "$1GBHP" ]]
+#then
+#      sed -i $CONFIG -e 's/"1gb-pages": false,/"1gb-pages": true,/g'
+#else
+#      sed -i $CONFIG -e 's/"1gb-pages": true,/"1gb-pages": false,/g'
+#fi
+if [[ ! -z "$DEBUG" ]]
+then
+debug
+if [ -f /root/xmrig.debug ] ;then 
+BINARY=/root/xmrig.debug
+fi
+fi
+
+
+#
+# set ulimit to sane levels
+# Might need extra permissions
+#
+if [[ ! -z "$SETLIMIT" ]]
+then
+	ulimit -a
+	echo "increasing lock to unlimited"
+	ulimit -l unlimited
+	ulimit -a
+fi
+
+if [[ ! -z "$TIMEOUT" ]]
+then
+	sleep $TIMEOUT
+fi
+
+CONFIG=/root/config_default.json
+if [[ ! -z "$TUNED" ]]
+then
+	CONFIG=/root/config_tuned.json
+fi
+
+if [[ ! -z "$ONEGBHP" ]] 
+then
+	env
+	echo "Using 1GB Hugepages config"
+	CONFIG=/root/config_1g.json
+fi
+
+#
+# copy custom config to /root 
+# So xmrig doesn't ignore cmdline args
+#
+cp $CONFIG /root/config.json
+
+echo s6-setuidgid root $BINARY $ARGS 
+exec 2>&1 \
+        s6-setuidgid root $BINARY $ARGS 
