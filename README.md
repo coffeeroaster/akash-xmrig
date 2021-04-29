@@ -1,13 +1,10 @@
 # Mine Monero with xmrig on [ Akash ](https://akash.network)  
 
-This project's goal is to use xmrig on Akash. Akash is an exciting crypto project that allows data centers to rent underutilized compute capacity in the form of a decentralized kubernetes service.  Akash is a very exciting and disruptive technology that is certainly worth a look [ Akash ](https://akash.network).
+This project's goal is to use xmrig on Akash. Akash is a crypto project that allows data centers the ability to rent underutilized compute capacity in the form of a decentralized kubernetes service akin to AWS, Azure, etc.
 
-To use Akash, you need to first purchase 
+XMRig [ XMRig ] is high performance crypto mining platform for Monero. This is particularly challenging to work with cloud infrastructure as it can require extensive CPU / memory resources. 
 
- fully decentralized fashion. hardware to rent out hardware / space on the open market 
-# Background and current status
 
-This repository successfuly deploys an xmrig on the Akash network. Akash is an exciting crypto project  
 
 
 # Buy me a coffee to keep the work going
@@ -19,16 +16,28 @@ This repository successfuly deploys an xmrig on the Akash network. Akash is an e
 
 # Getting started
 
-*Get some `$AKT` tokens. Coin gecko has a list of [exchanges](https://www.coingecko.com/en/coins/akash-network). I personally used [Gate.io ]( https://www.gate.io/ ). Although AscendX (Bitmax) appears to have much more volume. Additional exchanges are in the works from what I understand. You will need at least 5 for escrow. 
+First, get some `$AKT` tokens. CoinGecko has a list of [exchanges](https://www.coingecko.com/en/coins/akash-network). I have personally used [Gate.io ]( https://www.gate.io/ ). Although AscendX (Bitmax) appears to have much more volume. Additional exchanges are in the works from what I understand. You will need at least 5 for escrow. 
 
-* Setup Akash environment.
-** [Official Akash documemtation] https://docs.akash.network/guides/deploy
-** [Best Getting started link] https://github.com/tombeynon/akash-deploy
+## Setup Akash environment.
+* [Official Akash documemtation] https://docs.akash.network/guides/deploy
+* [Best Getting started link] https://github.com/tombeynon/akash-deploy
 
 # Status and profitability
 
-After some tweaking, this deployment was able to obtain **3200H/S**. According to Monero mining calculators, this should result in about $12 for a single deployment.
-Please note, this project is not to prove profitability, but instead a way to demonstrate the capabilities of the akash network.
+## potential profit
+After some tweaking, this deployment was able to obtain **3200H/S**. According to Monero mining calculators, this should result in about 0.03 XMR ( ~ $13 ) for a single deployment.
+
+## Cost of operations
+
+This sample deployment was accepted at 11uAKT per block. At the average cost of a block every 6.5 seconds, this results in a cost of:
+
+```
+seconds/month  = 3600×24×30   = 2592000
+blocks / month = 2592000 / 6.5 = 398769
+uAKT / month    = 398769 * 11 = 4386459
+== 4.07 AKT  (or ~ $22.00 / month)
+```
+At this point, this is not profitable. However with additional tweaking this may be in the future.
 
 # Deploying this on Akash -- 
 * This assumes that you have installed akash in `$HOME/bin/akash`
